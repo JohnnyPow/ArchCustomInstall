@@ -49,10 +49,6 @@ n
 n
 
 
-+200M
-n
-
-
 +32G
 n
 
@@ -66,7 +62,7 @@ t
 1
 1
 t
-4
+3
 19
 p
 w
@@ -84,18 +80,15 @@ partprobe
 echo "formatting partitions.."
 mkfs.vfat -F 32 /dev/"$disk"p1
 mkfs.ext4 /dev/"$disk"p2
-mkfs.ext4 /dev/"$disk"p3
-mkswap /dev/"$disk"p4
-mkfs.ext4 /dev/"$disk"p5
-swapon /dev/"$disk"p4
+mkswap /dev/"$disk"p3
+mkfs.ext4 /dev/"$disk"p4
+swapon /dev/"$disk"p3
 
-mount /dev/"$disk"p3 /mnt
+mount /dev/"$disk"p2 /mnt
 mkdir /mnt/boot
-mount /dev/"$disk"p2 /mnt/boot
-mkdir /mnt/boot/efi
-mount /dev/"$disk"p1 /mnt/boot/efi
+mount /dev/"$disk"p1 /mnt/boot
 mkdir /mnt/home
-mount /dev/"$disk"p5 /mnt/home
+mount /dev/"$disk"p4 /mnt/home
 
 pacstrap /mnt base base-devel
 

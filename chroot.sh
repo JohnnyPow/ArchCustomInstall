@@ -22,5 +22,5 @@ umount /run/lvm
 useradd -m -g users -G wheel -s /bin/zsh $2
 echo "enter password for $2"
 read -sr userpw
-chpasswd $2:$userpw
+$2:$userpw | chpasswd
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/sudoers" -o /etc/sudoers

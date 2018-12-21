@@ -149,3 +149,6 @@ mkdir /mnt/home
 mount /dev/vg/home /mnt/home
 swapon /dev/vg/swap
 
+info "generating up-to-date mirrorlist"
+pacman -Sy --noconfirm --needed pacman-contrib
+curl -s "https://www.archlinux.org/mirrorlist/?country=DE&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 5 - > mirrors

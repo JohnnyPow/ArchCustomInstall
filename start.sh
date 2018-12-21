@@ -81,6 +81,12 @@ fi
 # START                                                                        #
 ################################################################################
 
+### cleanup
+umount -R /mnt
+swapoff /dev/vg/swap
+vgremove -y vg
+cryptsetup close cryptlvm
+
 info "setting ntp"
 timedatectl set-ntp true
 
@@ -106,12 +112,6 @@ lsblk
 maj=$(lsblk -no MAJ:MIN,PATH | grep -w "$rootdisk" | cut -d ":" -f 1)
 bootpart=$(lsblk -nI $maj -o PATH,TYPE | grep part | cut -d " " -f 1 | head -n 1)
 rootpart=$(lsblk -nI $maj -o PATH,TYPE | grep part | cut -d " " -f 1 | tail -n 1)
-
-### cleanup
-umount -R /mnt
-swapoff /dev/vg/swap
-vgremove -y vg
-cryptsetup close cryptlvm
 
 info "setting up encryption"
 cryptsetup luksFormat --type luks2 $rootpart

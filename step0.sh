@@ -17,7 +17,7 @@ n
 w
 EOF
 
-maj=$(lsblk -no MAJ:MIN,PATH | grep -w "$rootdisk" | cut -d ":" -f 1)
+maj=$(lsblk -no MAJ:MIN,PATH | grep -w "$1" | cut -d ":" -f 1)
 rootpart=$(lsblk -nI $maj -o PATH,TYPE | grep part | cut -d " " -f 1 | tail -n 1)
 
 cryptsetup luksFormat --type luks2 $rootpart

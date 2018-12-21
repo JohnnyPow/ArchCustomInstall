@@ -148,6 +148,8 @@ mount $bootpart /mnt/boot
 mkdir /mnt/home
 mount /dev/vg/home /mnt/home
 swapon /dev/vg/swap
+mkdir /mnt/hostrun
+mount --bind /run /mnt/hostrun
 
 info "installing missing dependencies"
 pacman -Sy --noconfirm --needed pacman-contrib

@@ -2,6 +2,7 @@
 
 username=$1
 rootdisk=$2
+ram=$(free --giga | grep Mem: | awk '{print $2}')
 
 RED="\033[0;31m"
 GREEN="\033[0;32m"
@@ -66,6 +67,7 @@ fi
 
 info "creating user \"$username\""
 info "disk $rootdisk will be formatted"
+info "setting up ${ram}G swap"
 
 read -r -p "Continue? (type \"yes\") " response
 if [[ "$response" =~ ^([yY][eE][sS])$ ]]; then
@@ -98,9 +100,11 @@ n
 w
 EOF
 
+### debug
 lsblk
 
 maj=$(lsblk -no MAJ:MIN,PATH | grep -w "$rootdisk" | cut -d ":" -f 1)
+bootpart=$(lsblk -nI $maj -o PATH,TYPE | grep part | cut -d " " -f 1 | head -n 1)
 rootpart=$(lsblk -nI $maj -o PATH,TYPE | grep part | cut -d " " -f 1 | tail -n 1)
 
 info "setting up encryption"
@@ -111,3 +115,21 @@ else
   error "encryption"
   exit 1
 fi
+
+cryptsetup open $rootpart cryptlvm
+pvcreate /dev/mapper/cryptlvm
+vgcreate vg /dev/mapper/cryptlvm
+lvcreate -L ${ram}G vg -n swap
+### change to 40
+lvcreate -L 10G vg -n root
+lvcreate -l 100%FREE vg -n home
+mkfs.ext4 /dev/vg/root
+mkfs.ext4 /dev/vg/home
+mkswap /dev/vg/swap
+mount /dev/vg/root /mnt
+mkdir /mnt/home
+mount /dev/vg/home /mnt/home
+mkfs.vfat -F 32 $bootpart
+swapon /dev/vg/swap
+mount /dev/sdb1 /mnt/boot
+mkdir /mnt/boot

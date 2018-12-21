@@ -159,6 +159,7 @@ info "generating up-to-date mirrorlist"
 curl -s "https://www.archlinux.org/mirrorlist/?country=DE&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 5 - > /etc/pacman.d/mirrorlist
 
 pacstrap /mnt base base-devel
+
 genfstab -U /mnt >> /mnt/etc/fstab
 arch-chroot /mnt
 ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime

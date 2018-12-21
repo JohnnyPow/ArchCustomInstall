@@ -20,3 +20,7 @@ grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
 umount /run/lvm
 useradd -m -g users -G wheel -s /bin/zsh $2
+echo "enter password for $2"
+read -sr userpw
+chpasswd $2:$userpw
+curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/sudoers" -o /etc/sudoers

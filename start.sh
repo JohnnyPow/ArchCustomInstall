@@ -70,7 +70,8 @@ info "disk $rootdisk will be formatted"
 read -r -p "Continue? (type \"yes\") " response
 if [[ "$response" =~ ^([yY][eE][sS])$ ]]; then
   curl -sLO https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/step0.sh
-  step0.sh
+  chmod +x step0.sh
+  ./step0.sh
 else
   error "user cancelled"
   exit 1

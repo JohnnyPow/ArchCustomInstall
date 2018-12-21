@@ -158,4 +158,4 @@ pacstrap /mnt base base-devel
 
 genfstab -U /mnt >> /mnt/etc/fstab
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/chroot.sh" -o /mnt/chroot.sh
-arch-chroot /mnt bash chroot.sh
+arch-chroot /mnt bash chroot.sh $rootpart

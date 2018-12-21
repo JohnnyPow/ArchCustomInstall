@@ -11,7 +11,7 @@ curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/m
 mkinitcpio -p linux
 echo "set root password"
 passwd
-pacman -Sy --noconfirm --needed grub efibootmgr zsh dialog
+pacman -Sy --noconfirm --needed grub efibootmgr zsh dialog networkmanager
 ROOT_UUID=$(blkid $1 -s UUID -o value)
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/grub" | sed "s/#CRYPT#/$ROOT_UUID/" > /etc/default/grub
 mkdir /run/lvm
@@ -24,3 +24,4 @@ echo "enter password for $2"
 read -sr userpw
 $2:$userpw | chpasswd
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/sudoers" -o /etc/sudoers
+systemctl enable NetworkManager

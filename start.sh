@@ -161,4 +161,5 @@ curl -s "https://www.archlinux.org/mirrorlist/?country=DE&protocol=https&use_mir
 pacstrap /mnt base base-devel
 
 genfstab -U /mnt >> /mnt/etc/fstab
+curl -sLO "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/chroot.sh"
 arch-chroot /mnt chroot.sh

@@ -13,6 +13,6 @@ echo "set root password"
 passwd
 pacman -Sy --noconfirm --needed grub efibootmgr
 ROOT_UUID=$(blkid $1 -s UUID -o value)
-curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/grub" | sed "s/#CRYPT#/$ROOT_UUID/" /etc/default/grub
+curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/grub" | sed "s/#CRYPT#/$ROOT_UUID/" > /etc/default/grub
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg

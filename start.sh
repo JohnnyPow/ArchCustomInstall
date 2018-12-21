@@ -69,10 +69,45 @@ info "disk $rootdisk will be formatted"
 
 read -r -p "Continue? (type \"yes\") " response
 if [[ "$response" =~ ^([yY][eE][sS])$ ]]; then
-  curl -sLO --no-sessionid https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/step0.sh
-  chmod +x step0.sh
-  ./step0.sh $rootdisk
+  info "starting installation"
 else
   error "user cancelled"
+  exit 1
+fi
+
+################################################################################
+# START                                                                        #
+################################################################################
+
+info "setting ntp"
+timedatectl set-ntp true
+
+info "formatting disk"
+fdisk --wipe always --wipe-partition always /dev/sda >/dev/null<<EOF
+g
+n
+
+
++550M
+t
+1
+n
+
+
+
+w
+EOF
+
+lsblk
+
+maj=$(lsblk -no MAJ:MIN,PATH | grep -w "$1" | cut -d ":" -f 1)
+rootpart=$(lsblk -nI $maj -o PATH,TYPE | grep part | cut -d " " -f 1 | tail -n 1)
+
+info "setting up encryption"
+cryptsetup luksFormat --type luks2 $rootpart
+if [ $? -eq 0 ]; then
+  pass "encryption"
+else
+  error "encryption"
   exit 1
 fi

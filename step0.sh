@@ -20,4 +20,8 @@ EOF
 maj=$(lsblk -no MAJ:MIN,PATH | grep -w "$1" | cut -d ":" -f 1)
 rootpart=$(lsblk -nI $maj -o PATH,TYPE | grep part | cut -d " " -f 1 | tail -n 1)
 
-cryptsetup luksFormat --type luks2 $rootpart
+cryptsetup luksFormat --type luks2 $rootpart <<EOF
+YES
+$2
+$2
+EOF

@@ -2,7 +2,6 @@
 
 username=$1
 rootdisk=$2
-passphrase=$3
 
 RED="\033[0;31m"
 GREEN="\033[0;32m"
@@ -21,7 +20,7 @@ function error() {
   echo -e "\r[${RED}ERROR${NOCOLOR}] $1"
 }
 
-if [ ! $passphrase ]; then
+if [ ! $rootdisk ]; then
   error "argument missing"
   info "usage: ./start.sh USERNAME DISK"
   exit 1
@@ -70,9 +69,9 @@ info "disk $rootdisk will be formatted"
 
 read -r -p "Continue? (type \"yes\") " response
 if [[ "$response" =~ ^([yY][eE][sS])$ ]]; then
-  curl -sLO https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/step0.sh
+  curl -sLO --no-sessionid https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/step0.sh
   chmod +x step0.sh
-  ./step0.sh $rootdisk "$passphrase"
+  ./step0.sh $rootdisk
 else
   error "user cancelled"
   exit 1

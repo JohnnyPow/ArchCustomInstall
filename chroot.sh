@@ -1,31 +1,17 @@
 ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 hwclock --systohc
-
-curl https://github.com/JohnnyPow/ArchRice/raw/master/etc/locale.gen > /etc/locale.gen
+curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/locale.gen" -o /etc/locale.gen
 locale-gen
-
-curl https://github.com/JohnnyPow/ArchRice/raw/master/etc/locale.conf > /etc/locale.conf
-curl https://github.com/JohnnyPow/ArchRice/raw/master/etc/vconsole.conf > /etc/vconsole.conf
-
-echo "Enter a name for this computer:"
-read comp
-cat comp > /mnt/etc/hostname
-rm comp
-
-pacman --noconfirm --needed -Sy networkmanager
-systemctl enable NetworkManager
-systemctl start NetworkManager
-
+locale > /etc/locale.conf
+curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/vconsole.conf" -o /etc/vconsole.conf
+echo "enter hostname"
+read -r hostname
+echo "$hostname" > /etc/hostname
+curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/mkinitcpio.conf" -o /etc/mkinitcpio.conf
 mkinitcpio -p linux
-
-echo "Set a password for the root account:"
+echo "set root password"
 passwd
-
-pacman --noconfirm --needed -S efibootmgr intel-ucode
-
-mkdir -p /boot/loader/entries
-mkdir -p /boot/EFI/BOOT
-curl https://github.com/JohnnyPow/ArchRice/raw/master/boot/EFI/BOOT/BOOTX64.EFI > /boot/EFI/BOOT/BOOTX64.EFI
-curl https://github.com/JohnnyPow/ArchRice/raw/master/boot/loader/loader.conf > /boot/loader/loader.conf
-curl https://github.com/JohnnyPow/ArchRice/raw/master/boot/loader/entries/arch.conf > /boot/loader/entries/arch.conf
-echo "check /boot/loader/entries/arch.conf and change according to your system"
+install grub efibootmgr
+curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/grub" -o /etc/default/grub
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+grub-mkconfig -o /boot/grub/grub.cfg

@@ -21,10 +21,6 @@ function error() {
   echo -e "\r[${RED}ERROR${NOCOLOR}] $1"
 }
 
-function install() {
-  pacman -Sy --noconfirm --needed $@
-}
-
 if [ ! $rootdisk ]; then
   error "argument missing"
   info "usage: ./start.sh USERNAME DISK"
@@ -154,12 +150,12 @@ mount /dev/vg/home /mnt/home
 swapon /dev/vg/swap
 
 info "installing missing dependencies"
-install pacman-contrib
+pacman -Sy --noconfirm --needed pacman-contrib
 info "generating up-to-date mirrorlist"
 curl -s "https://www.archlinux.org/mirrorlist/?country=DE&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 5 - > /etc/pacman.d/mirrorlist
 
 pacstrap /mnt base base-devel
 
 genfstab -U /mnt >> /mnt/etc/fstab
-curl -sLO "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/chroot.sh"
-arch-chroot /mnt chroot.sh
+curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/chroot.sh" -o /mnt/chroot.sh
+arch-chroot /mnt bash chroot.sh

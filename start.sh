@@ -83,7 +83,7 @@ info "setting ntp"
 timedatectl set-ntp true
 
 info "formatting disk"
-fdisk --wipe always --wipe-partition always /dev/sda >/dev/null<<EOF
+fdisk --wipe always --wipe-partition always /dev/sda <<EOF
 g
 n
 

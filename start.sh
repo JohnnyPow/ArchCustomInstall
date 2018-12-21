@@ -84,7 +84,7 @@ fi
 info "setting ntp"
 timedatectl set-ntp true
 
-info "formatting disk"
+info "partitoning disk"
 fdisk --wipe always --wipe-partition always /dev/sda <<EOF
 g
 n
@@ -109,27 +109,37 @@ rootpart=$(lsblk -nI $maj -o PATH,TYPE | grep part | cut -d " " -f 1 | tail -n 1
 
 info "setting up encryption"
 cryptsetup luksFormat --type luks2 $rootpart
-if [ $? -eq 0 ]; then
-  pass "encryption"
-else
+if [ $? -ne 0 ]; then
   error "encryption"
   exit 1
 fi
 
 cryptsetup open $rootpart cryptlvm
+if [ $? -ne 0 ]; then
+  error "decryption"
+  exit 1
+fi
+
+info "creating lvm environment"
 pvcreate /dev/mapper/cryptlvm
 vgcreate vg /dev/mapper/cryptlvm
+
 lvcreate -L ${ram}G vg -n swap
 ### change to 40
 lvcreate -L 10G vg -n root
 lvcreate -l 100%FREE vg -n home
+
+info "formatting partitions"
+mkfs.vfat -F 32 $bootpart
 mkfs.ext4 /dev/vg/root
 mkfs.ext4 /dev/vg/home
 mkswap /dev/vg/swap
+
+info "mounting partitions"
 mount /dev/vg/root /mnt
+mkdir /mnt/boot
+mount /dev/sdb1 /mnt/boot
 mkdir /mnt/home
 mount /dev/vg/home /mnt/home
-mkfs.vfat -F 32 $bootpart
 swapon /dev/vg/swap
-mount /dev/sdb1 /mnt/boot
-mkdir /mnt/boot
+

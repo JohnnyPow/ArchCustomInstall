@@ -91,7 +91,8 @@ info "creating user \"$username\""
 info "disk $rootdisk will be formatted"
 info "setting up ${ram}G swap"
 
-read -r -p "Continue? (type \"yes\") " response
+prompt "Continue? (type \"yes\"): "
+read -r response
 if [[ "$response" =~ ^([yY][eE][sS])$ ]]; then
   info "starting installation"
 else

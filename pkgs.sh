@@ -1,5 +1,12 @@
 #!/bin/bash
 
+CYAN="\033[0;36m"
+NOCOLOR="\033[0m"
+IFS=$'\n'
+function infon() {
+  echo -en "\r                                                                                \r[${CYAN}INFO${NOCOLOR}] $1"
+}
+
 mkdir .build
 cd .build
 
@@ -12,10 +19,20 @@ cd yay
 sudo -u \#1000 makepkg &>/dev/null
 pacman -U --noconfirm --needed yay*.pkg.tar.xz &>/dev/null
 
-curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/pkgs" | pacman -S --noconfirm --needed - &>/dev/null
-curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/aurpkgs" | sudo -u \#1000 yay -S --noconfirm --needed - &>/dev/null
+curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/pkgs" | pacman -S --noconfirm --needed - &>out &
+while [ $(ps | grep pacman | wc -l) -gt 0 ]; do
+  infon "$(cat out | tail -n 1 | sed "s/\-[^-]*-[^-]*-[^-]*$/.../g")"
+  sleep 1
+done
+echo
+curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/aurpkgs" | sudo -u \#1000 yay -S --noconfirm --needed - &>out &
+while [ $(ps | grep yay | wc -l) -gt 0 ]; do
+  infon "$(cat out | tail -n 1 | sed "s/\-[^-]*-[^-]*-[^-]*$/.../g")"
+  sleep 1
+done
+echo
 systemctl enable lightdm &>/dev/null
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/lightdm.conf" -o /etc/lightdm/lightdm.conf
 git clone git://git.suckless.org/st &>/dev/null
 cd st
-make && make install &>/dev/null
+make &>/dev/null && make install &>/dev/null

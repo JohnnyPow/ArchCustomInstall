@@ -25,6 +25,7 @@ lsblk
 read -r -p "Enter rootdisk: " rootdisk
 read -r -p "Enter hostname: " host
 read -r -s -p "Enter root password: " rootpw
+read -r -s -p "Enter encryption passphrase: " encpw
 
 if [ ! $rootdisk ]; then
   error "argument missing"
@@ -118,7 +119,6 @@ maj=$(lsblk -no MAJ:MIN,PATH | grep -w "$rootdisk" | cut -d ":" -f 1)
 bootpart=$(lsblk -nI $maj -o PATH,TYPE | grep part | cut -d " " -f 1 | head -n 1)
 rootpart=$(lsblk -nI $maj -o PATH,TYPE | grep part | cut -d " " -f 1 | tail -n 1)
 
-encpw="123"
 info "setting up encryption"
 cryptsetup luksFormat --type luks2 $rootpart <<EOF
 "$encpw"

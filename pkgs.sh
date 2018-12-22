@@ -12,9 +12,11 @@ function yayins() {
 }
 
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/makepkg.conf" -o /etc/makepkg.conf
-pacins git
+pacins git go
 
-sudo -u \#1000 git clone https://aur.archlinux.org/yay.git
+git clone https://aur.archlinux.org/yay.git
+chown -R 1000:users .
 cd yay
-sudo -u \#1000 makepkg -si
+sudo -u \#1000 makepkg
+pacman -U yay*.pkg.tar.xz
 

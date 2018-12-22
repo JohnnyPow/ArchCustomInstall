@@ -33,46 +33,6 @@ function wrap() {
   done
 }
 
-prompt "Enter name for new user: "
-read -r username
-prompt "Enter password for \"$username\": "
-read -r -s userpw
-echo
-prompt "Enter password for root: "
-read -r -s rootpw
-echo
-prompt "Enter encryption passphrase: "
-read -r -s encpw
-echo
-info "available disks:"
-wrap info "$(lsblk -o PATH,TYPE | grep disk | cut -d " " -f 1)"
-prompt "Enter rootdisk: "
-read -r rootdisk
-prompt "Enter hostname: "
-read -r host
-
-if [ ! $rootdisk ]; then
-  error "argument missing"
-  info "usage: ./start.sh USERNAME DISK"
-  exit 1
-fi
-
-if [[ $username =~ ^[a-z_][a-z0-9_-]*$ ]]; then
-  pass "valid username"
-else
-  error "$username is not a valid username"
-  exit 1
-fi
-
-if lsblk -no PATH,TYPE | grep disk | grep -w $rootdisk >/dev/null; then
-  pass "valid rootdisk"
-else
-  error "$rootdisk is not a valid disk"
-  info "available disks:"
-  lsblk -no PATH,TYPE | grep disk | cut -d " " -f 1
-  exit 1
-fi
-
 if [[ $(id -u) -eq 0 ]]; then
   pass "root"
 else
@@ -94,6 +54,40 @@ else
   error "no working internet connection"
   exit 1
 fi
+
+info "available disks:"
+wrap info "$(lsblk -o PATH,TYPE | grep disk | cut -d " " -f 1)"
+prompt "Enter rootdisk: "
+read -r rootdisk
+if lsblk -no PATH,TYPE | grep disk | grep -w $rootdisk >/dev/null; then
+  pass "valid rootdisk"
+else
+  error "$rootdisk is not a valid disk"
+  info "available disks:"
+  lsblk -no PATH,TYPE | grep disk | cut -d " " -f 1
+  exit 1
+fi
+
+prompt "Enter name for new user: "
+read -r username
+if [[ $username =~ ^[a-z_][a-z0-9_-]*$ ]]; then
+  pass "valid username"
+else
+  error "$username is not a valid username"
+  exit 1
+fi
+
+prompt "Enter password for \"$username\": "
+read -r -s userpw
+echo
+prompt "Enter password for root: "
+read -r -s rootpw
+echo
+prompt "Enter encryption passphrase: "
+read -r -s encpw
+echo
+prompt "Enter hostname: "
+read -r host
 
 info "creating user \"$username\""
 info "disk $rootdisk will be formatted"

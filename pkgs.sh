@@ -13,3 +13,4 @@ sudo -u \#1000 makepkg
 pacman -U --noconfirm --needed yay*.pkg.tar.xz
 
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/pkgs" | pacman -S --noconfirm --needed -
+curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/aurpkgs" | yay -S --noconfirm --needed -

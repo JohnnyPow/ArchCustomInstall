@@ -118,14 +118,20 @@ maj=$(lsblk -no MAJ:MIN,PATH | grep -w "$rootdisk" | cut -d ":" -f 1)
 bootpart=$(lsblk -nI $maj -o PATH,TYPE | grep part | cut -d " " -f 1 | head -n 1)
 rootpart=$(lsblk -nI $maj -o PATH,TYPE | grep part | cut -d " " -f 1 | tail -n 1)
 
+encpw="123"
 info "setting up encryption"
-cryptsetup luksFormat --type luks2 $rootpart
+cryptsetup luksFormat --type luks2 $rootpart <<EOF
+"$encpw"
+"$encpw"
+EOF
 if [ $? -ne 0 ]; then
   error "encryption"
   exit 1
 fi
 
-cryptsetup open $rootpart cryptlvm
+cryptsetup open $rootpart cryptlvm <<EOF
+"$encpw"
+EOF
 if [ $? -ne 0 ]; then
   error "decryption"
   exit 1

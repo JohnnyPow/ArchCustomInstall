@@ -116,7 +116,7 @@ info "setting ntp"
 timedatectl set-ntp true
 
 info "partitoning disk"
-fdisk --wipe always --wipe-partition always /dev/sda <<EOF
+fdisk --wipe always --wipe-partition always /dev/sda &>/dev/null <<EOF
 g
 n
 
@@ -130,9 +130,6 @@ n
 
 w
 EOF
-
-### debug
-lsblk
 
 maj=$(lsblk -no MAJ:MIN,PATH | grep -w "$rootdisk" | cut -d ":" -f 1)
 bootpart=$(lsblk -nI $maj -o PATH,TYPE | grep part | cut -d " " -f 1 | head -n 1)

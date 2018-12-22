@@ -5,7 +5,6 @@ ram=$(free --giga | grep Mem: | awk '{print $2}')
 RED="\033[0;31m"
 GREEN="\033[0;32m"
 YELLOW="\033[0;33m"
-BLUE="\033[0;34m"
 MAGENTA="\033[0;35m"
 CYAN="\033[0;36m"
 NOCOLOR="\033[0m"
@@ -15,29 +14,32 @@ function pass() {
 }
 
 function info() {
-  echo -e "\r[${BLUE}INFO${NOCOLOR}] $1"
+  echo -e "\r[${CYAN}INFO${NOCOLOR}] $1"
 }
 
 function prompt() {
   echo -e "\r[${YELLOW}prompt${NOCOLOR}] $1"
-  echo -e "\r[${CYAN}prompt${NOCOLOR}] $1"
-  echo -e "\r[${MAGENTA}prompt${NOCOLOR}] $1"
 }
 
 function error() {
   echo -e "\r[${RED}ERROR${NOCOLOR}] $1"
 }
 
-prompt "testiii"
-read -r -p "Enter username: " username
-read -r -s -p "Enter user password: " userpw
+prompt "Enter username: "
+read -r username
+prompt "Enter password for $username: "
+read -r -s userpw
 echo
 info "available disks:"
 lsblk -o PATH,TYPE | grep disk | cut -d " " -f 1
-read -r -p "Enter rootdisk: " rootdisk
-read -r -p "Enter hostname: " host
-read -r -s -p "Enter root password: " rootpw
-read -r -s -p "Enter encryption passphrase: " encpw
+prompt "Enter rootdisk: "
+read -r rootdisk
+prompt "Enter hostname: "
+read -r host
+prompt "Enter root password: "
+read -r -s rootpw
+prompt "Enter encryption passphrase: "
+read -r -s encpw
 
 if [ ! $rootdisk ]; then
   error "argument missing"

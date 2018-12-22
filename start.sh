@@ -8,6 +8,7 @@ YELLOW="\033[0;33m"
 MAGENTA="\033[0;35m"
 CYAN="\033[0;36m"
 NOCOLOR="\033[0m"
+IFS=$'\n'
 
 function pass() {
   echo -e "\r[${GREEN}PASS${NOCOLOR}] $1"
@@ -25,6 +26,12 @@ function error() {
   echo -e "\r[${RED}ERROR${NOCOLOR}] $1"
 }
 
+function wrap() {
+  for i in ${disks[@]}; do
+    $1 $i
+  done
+}
+
 prompt "Enter name for new user: "
 read -r username
 prompt "Enter password for \"$username\": "
@@ -37,7 +44,7 @@ prompt "Enter encryption passphrase: "
 read -r -s encpw
 echo
 info "available disks:"
-lsblk -o PATH,TYPE | grep disk | cut -d " " -f 1
+wrap info $(lsblk -o PATH,TYPE | grep disk | cut -d " " -f 1)
 prompt "Enter rootdisk: "
 read -r rootdisk
 prompt "Enter hostname: "

@@ -12,7 +12,7 @@ function infon() {
   echo -en "\r                                                                                \r[${CYAN}INFO${NOCOLOR}] $1"
 }
 
-mkdir .build
+mkdir -p .build
 cd .build
 
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/makepkg.conf" -o /etc/makepkg.conf

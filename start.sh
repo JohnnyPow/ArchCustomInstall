@@ -18,17 +18,23 @@ function info() {
 }
 
 function prompt() {
-  echo -e "\r[${YELLOW}prompt${NOCOLOR}] $1"
+  echo -en "\r[${YELLOW}PROMPT${NOCOLOR}] $1"
 }
 
 function error() {
   echo -e "\r[${RED}ERROR${NOCOLOR}] $1"
 }
 
-prompt "Enter username: "
+prompt "Enter name for new user: "
 read -r username
-prompt "Enter password for $username: "
+prompt "Enter password for \"$username\": "
 read -r -s userpw
+echo
+prompt "Enter password for root: "
+read -r -s rootpw
+echo
+prompt "Enter encryption passphrase: "
+read -r -s encpw
 echo
 info "available disks:"
 lsblk -o PATH,TYPE | grep disk | cut -d " " -f 1
@@ -36,10 +42,6 @@ prompt "Enter rootdisk: "
 read -r rootdisk
 prompt "Enter hostname: "
 read -r host
-prompt "Enter root password: "
-read -r -s rootpw
-prompt "Enter encryption passphrase: "
-read -r -s encpw
 
 if [ ! $rootdisk ]; then
   error "argument missing"

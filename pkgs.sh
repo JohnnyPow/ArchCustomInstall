@@ -12,8 +12,8 @@ cd yay
 sudo -u \#1000 makepkg &>/dev/null
 pacman -U --noconfirm --needed yay*.pkg.tar.xz &>/dev/null
 
-curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/pkgs" | pacman -S --noconfirm --needed -
-curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/aurpkgs" | sudo -u \#1000 yay -S --noconfirm --needed -
+curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/pkgs" | pacman -S --noconfirm --needed - &>/dev/null
+curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/aurpkgs" | sudo -u \#1000 yay -S --noconfirm --needed - &>/dev/null
 systemctl enable lightdm &>/dev/null
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/lightdm.conf" -o /etc/lightdm/lightdm.conf
 git clone git://git.suckless.org/st &>/dev/null

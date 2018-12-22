@@ -3,12 +3,12 @@
 ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 hwclock --systohc
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/locale.gen" -o /etc/locale.gen
-locale-gen
+locale-gen &>/dev/null
 locale > /etc/locale.conf
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/vconsole.conf" -o /etc/vconsole.conf
 echo "$5" > /etc/hostname
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/mkinitcpio.conf" -o /etc/mkinitcpio.conf
-mkinitcpio -p linux
+mkinitcpio -p linux &>/dev/null
 pacman -Sy --noconfirm --needed grub efibootmgr intel-ucode zsh dialog networkmanager &>/dev/null
 ROOT_UUID=$(blkid $1 -s UUID -o value)
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/grub" | sed "s/#CRYPT#/$ROOT_UUID/" > /etc/default/grub

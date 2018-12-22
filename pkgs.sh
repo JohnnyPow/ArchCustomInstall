@@ -1,7 +1,7 @@
 #!/bin/bash
 
-mkdir $HOME/.build
-cd $HOME/.build
+mkdir .build
+cd .build
 
 function pacins() {
   pacman -S --noconfirm --needed $@
@@ -14,8 +14,7 @@ function yayins() {
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/makepkg.conf" -o /etc/makepkg.conf
 pacins git
 
-git clone https://aur.archlinux.org/yay.git
+sudo -u \#1000 git clone https://aur.archlinux.org/yay.git
 cd yay
-makepkg -si
-
+sudo -u \#1000 makepkg -si
 

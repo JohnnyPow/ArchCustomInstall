@@ -16,3 +16,6 @@ curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/p
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/aurpkgs" | sudo -u \#1000 yay -S --noconfirm --needed -
 systemctl enable lightdm
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/lightdm.conf" -o /etc/lightdm/lightdm.conf
+git clone git://git.suckless.org/st
+cd st
+make && make install

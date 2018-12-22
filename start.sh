@@ -20,8 +20,11 @@ function error() {
 }
 
 read -r -p "Enter username: " username
+read -r -s -p "Enter user password: " userpw
 lsblk
 read -r -p "Enter rootdisk: " rootdisk
+read -r -p "Enter hostname: " host
+read -r -s -p "Enter root password: " rootpw
 
 if [ ! $rootdisk ]; then
   error "argument missing"
@@ -162,7 +165,7 @@ pacstrap /mnt base base-devel
 
 genfstab -U /mnt >> /mnt/etc/fstab
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/chroot.sh" -o /mnt/chroot.sh
-arch-chroot /mnt bash chroot.sh $rootpart $username
+arch-chroot /mnt bash chroot.sh $rootpart $username $userpw $rootpw $host
 umount /mnt/hostrun
 rm -rf /mnt/hostrun
 rm /mnt/chroot.sh

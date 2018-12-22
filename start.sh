@@ -47,7 +47,7 @@ else
   exit 1
 fi
 
-echo -n "[TEST] internet connection"
+echo -n "\r[${MAGENTA}TEST${NOCOLOR}] internet connection"
 if ping archlinux.org -c 2 >/dev/null; then
   pass "internet connection"
 else
@@ -107,10 +107,10 @@ fi
 ################################################################################
 
 ### cleanup
-umount -R /mnt
-swapoff /dev/vg/swap
-vgremove -y vg
-cryptsetup close cryptlvm
+umount -R /mnt &>/dev/null
+swapoff /dev/vg/swap &>/dev/null
+vgremove -y vg &>/dev/null
+cryptsetup close cryptlvm &>/dev/null
 
 info "setting ntp"
 timedatectl set-ntp true

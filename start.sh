@@ -200,7 +200,7 @@ while [ $(ps | grep pacstrap | wc -l) -gt 0 ]; do
 done
 echo
 
-genfstab -U /mnt >> /mnt/etc/fstab &>/dev/null
+genfstab -U /mnt >> /mnt/etc/fstab
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/chroot.sh" -o /mnt/chroot.sh
 arch-chroot /mnt bash chroot.sh $rootpart $username $userpw $rootpw $host
 umount /mnt/hostrun

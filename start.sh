@@ -60,9 +60,14 @@ else
 fi
 
 info "available disks:"
-wrap info "$(lsblk -o PATH,TYPE | grep disk | cut -d " " -f 1)"
-prompt "Enter rootdisk: "
-read -r rootdisk
+disks="$(lsblk -o PATH,TYPE | grep disk | cut -d " " -f 1)"
+if [ ${#disks[@]} -eq 1 ]; then
+  rootdisk=${disks[0]}
+else
+  wrap info "$disks"
+  prompt "Enter rootdisk: "
+  read -r rootdisk
+fi
 if lsblk -no PATH,TYPE | grep disk | grep -w $rootdisk >/dev/null; then
   pass "valid rootdisk"
 else

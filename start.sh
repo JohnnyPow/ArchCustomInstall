@@ -18,12 +18,16 @@ function info() {
   echo -e "\r[${CYAN}INFO${NOCOLOR}] $1"
 }
 
+function infon() {
+  echo -en "\r                                                                                \r[${CYAN}INFO${NOCOLOR}] $1"
+}
+
 function prompt() {
-  echo -en "\r[${YELLOW}PROMPT${NOCOLOR}] $1"
+  echo -en "\r[${YELLOW}USER${NOCOLOR}] $1"
 }
 
 function error() {
-  echo -e "\r[${RED}ERROR${NOCOLOR}] $1"
+  echo -e "\r[${RED}FAIL${NOCOLOR}] $1"
 }
 
 function wrap() {
@@ -47,7 +51,7 @@ else
   exit 1
 fi
 
-echo -n "\r[${MAGENTA}TEST${NOCOLOR}] internet connection"
+echo -en "\r[${MAGENTA}TEST${NOCOLOR}] internet connection"
 if ping archlinux.org -c 2 >/dev/null; then
   pass "internet connection"
 else
@@ -154,19 +158,19 @@ if [ $? -ne 0 ]; then
 fi
 
 info "creating lvm environment"
-pvcreate /dev/mapper/cryptlvm
-vgcreate vg /dev/mapper/cryptlvm
+pvcreate /dev/mapper/cryptlvm &>/dev/null
+vgcreate vg /dev/mapper/cryptlvm &>/dev/null
 
-lvcreate -L ${ram}G vg -n swap
+lvcreate -L ${ram}G vg -n swap &>/dev/null
 ### change to 40
-lvcreate -L 10G vg -n root
-lvcreate -l 100%FREE vg -n home
+lvcreate -L 10G vg -n root &>/dev/null
+lvcreate -l 100%FREE vg -n home &>/dev/null
 
 info "formatting partitions"
-mkfs.vfat -F 32 $bootpart
-mkfs.ext4 /dev/vg/root
-mkfs.ext4 /dev/vg/home
-mkswap /dev/vg/swap
+mkfs.vfat -F 32 $bootpart &>/dev/null
+mkfs.ext4 /dev/vg/root &>/dev/null
+mkfs.ext4 /dev/vg/home &>/dev/null
+mkswap /dev/vg/swap &>/dev/null
 
 info "mounting partitions"
 mount /dev/vg/root /mnt
@@ -179,13 +183,19 @@ mkdir /mnt/hostrun
 mount --bind /run /mnt/hostrun
 
 info "installing missing dependencies"
-pacman -Sy --noconfirm --needed pacman-contrib
+pacman -Sy --noconfirm --needed pacman-contrib &>/dev/null
 info "generating up-to-date mirrorlist"
 curl -s "https://www.archlinux.org/mirrorlist/?country=DE&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 5 - > /etc/pacman.d/mirrorlist
 
-pacstrap /mnt base base-devel
+pacstrap /mnt base base-devel &>pacstrap.out &
 
-genfstab -U /mnt >> /mnt/etc/fstab
+while [ $(ps | grep pacstrap | wc -l) -gt 0 ]; do
+  infon "$(cat pacstrap.out | tail -n 1 | sed "s/\-[^-]*-[^-]*-[^-]*$/.../g")"
+  sleep 1
+done
+echo
+
+genfstab -U /mnt >> /mnt/etc/fstab &>/dev/null
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/chroot.sh" -o /mnt/chroot.sh
 arch-chroot /mnt bash chroot.sh $rootpart $username $userpw $rootpw $host
 umount /mnt/hostrun

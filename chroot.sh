@@ -21,6 +21,8 @@ echo "root:$4" | chpasswd
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/sudoers.temp" -o /etc/sudoers
 systemctl enable NetworkManager
 
+cd /tmp
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/pkgs.sh" | bash
-curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/rice.sh" | bash $2
+curl -sLO "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/rice.sh"
+bash rice.sh $2
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/sudoers" -o /etc/sudoers

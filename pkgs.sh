@@ -33,7 +33,7 @@ done
 echo
 info "installing AUR packages"
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/aurpkgs" | sudo -u \#1000 yay -S --noconfirm --needed - &>out &
-while [ $(ps --no-headers -C yay | wc -l) -gt 0 ]; do
+while [ $(ps --no-headers -C sudo | wc -l) -gt 0 ]; do
   infon "$(cat out | tail -n 1)"
   sleep 1
 done

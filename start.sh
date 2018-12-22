@@ -27,7 +27,8 @@ function error() {
 }
 
 function wrap() {
-  for i in ${disks[@]}; do
+  arr=$2
+  for i in ${arr[@]}; do
     $1 $i
   done
 }
@@ -44,7 +45,7 @@ prompt "Enter encryption passphrase: "
 read -r -s encpw
 echo
 info "available disks:"
-wrap info $(lsblk -o PATH,TYPE | grep disk | cut -d " " -f 1)
+wrap info "$(lsblk -o PATH,TYPE | grep disk | cut -d " " -f 1)"
 prompt "Enter rootdisk: "
 read -r rootdisk
 prompt "Enter hostname: "

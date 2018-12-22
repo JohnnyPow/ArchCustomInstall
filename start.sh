@@ -21,7 +21,7 @@ function error() {
 
 read -r -p "Enter username: " username
 read -r -s -p "Enter user password: " userpw
-lsblk
+lsblk -o PATH,TYPE | grep disk | cut -d " " -f 1
 read -r -p "Enter rootdisk: " rootdisk
 read -r -p "Enter hostname: " host
 read -r -s -p "Enter root password: " rootpw
@@ -121,8 +121,8 @@ rootpart=$(lsblk -nI $maj -o PATH,TYPE | grep part | cut -d " " -f 1 | tail -n 1
 
 info "setting up encryption"
 cryptsetup luksFormat --type luks2 $rootpart <<EOF
-"$encpw"
-"$encpw"
+$encpw
+$encpw
 EOF
 if [ $? -ne 0 ]; then
   error "encryption"
@@ -130,7 +130,7 @@ if [ $? -ne 0 ]; then
 fi
 
 cryptsetup open $rootpart cryptlvm <<EOF
-"$encpw"
+$encpw
 EOF
 if [ $? -ne 0 ]; then
   error "decryption"

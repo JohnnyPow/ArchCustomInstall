@@ -1,7 +1,5 @@
 #!/bin/bash
 
-username=$1
-rootdisk=$2
 ram=$(free --giga | grep Mem: | awk '{print $2}')
 
 RED="\033[0;31m"
@@ -20,6 +18,10 @@ function info() {
 function error() {
   echo -e "\r[${RED}ERROR${NOCOLOR}] $1"
 }
+
+read -r -p "Enter username: " username
+lsblk
+read -r -p "Enter rootdisk: " rootdisk
 
 if [ ! $rootdisk ]; then
   error "argument missing"

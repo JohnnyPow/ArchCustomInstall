@@ -6,7 +6,10 @@ i3blocks
 i3-gaps
 keepassxc
 lightdm
+mpc
+mpd
 mpv
+ncmpcpp
 ranger
 xfce4-power-manager
 xorg-server

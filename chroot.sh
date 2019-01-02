@@ -38,5 +38,25 @@ cd /tmp
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/pkgs.sh" | bash
 info "cloning rice"
 curl -sLO "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/rice.sh"
-bash rice.sh $2
+sudo -u $2 bash rice.sh $2
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/sudoers" -o /etc/sudoers
+curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/hidpi" -o /etc/profile.d/hidpi.sh
+
+mkdir -p /etc/samba/credentials
+chown root:root /etc/samba/credentials
+chmod 700 /etc/samba/credentials
+echo "username=$7" > /etc/samba/credentials/$6
+echo "password=$8" >> /etc/samba/credentials/$6
+chmod 600 /etc/samba/credentials/$6
+mkdir /mnt/{home,web,shared,media,MyStuff}
+echo "//$6/home /mnt/home cifs credentials=/etc/samba/credentials/$6,uid=1000,x-systemd.automount,noauto,_netdev 0 0" >> /etc/fstab
+echo "//$6/web /mnt/web cifs credentials=/etc/samba/credentials/$6,uid=1000,x-systemd.automount,noauto,_netdev 0 0" >> /etc/fstab
+echo "//$6/shared /mnt/shared cifs credentials=/etc/samba/credentials/$6,uid=1000,x-systemd.automount,noauto,_netdev 0 0" >> /etc/fstab
+echo "//$6/media /mnt/media cifs credentials=/etc/samba/credentials/$6,uid=1000,x-systemd.automount,noauto,_netdev 0 0" >> /etc/fstab
+echo "//$6/MyStuff /mnt/MyStuff cifs credentials=/etc/samba/credentials/$6,uid=1000,x-systemd.automount,noauto,_netdev 0 0" >> /etc/fstab
+ssh-keygen &>/dev/null <<EOF
+
+EOF
+mount /mnt/home
+sudo -u $2 git clone /mnt/home/sync /home/$2/.sync
+sudo -u $2 bash /home/$2/.sync/deploy.sh

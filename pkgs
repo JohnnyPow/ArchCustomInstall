@@ -1,3 +1,4 @@
+compton
 dmenu
 feh
 ffmpeg
@@ -10,9 +11,12 @@ mpc
 mpd
 mpv
 ncmpcpp
-ranger
+nnn
+openssh
+ttf-dejavu
 xfce4-power-manager
 xorg-server
+xorg-xrdb
 youtube-dl
 zathura
 zathura-pdf-mupdf

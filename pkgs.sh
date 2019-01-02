@@ -43,4 +43,5 @@ curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/l
 info "installing st"
 git clone git://git.suckless.org/st &>/dev/null
 cd st
-make &>/dev/null && make install &>/dev/null
+sed -i config.def.h -e '/\*font/ s/".*\(pixelsize=\)[^:]*/"InconsolataGo Nerd Font Mono:\124/'
+make install &>/dev/null

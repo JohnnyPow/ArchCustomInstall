@@ -60,14 +60,14 @@ else
 fi
 
 disks="$(lsblk -o PATH,TYPE | grep disk | cut -d " " -f 1)"
-if [ ${#disks[@]} -eq 1 ]; then
-  rootdisk=${disks[0]}
-else
+#if [ ${#disks[@]} -eq 1 ]; then
+#  rootdisk=${disks[0]}
+#else
   info "available disks:"
   wrap info "$disks"
   prompt "Enter rootdisk: "
   read -r rootdisk
-fi
+#fi
 if lsblk -no PATH,TYPE | grep disk | grep -w $rootdisk >/dev/null; then
   pass "valid rootdisk"
 else
@@ -97,6 +97,13 @@ read -r -s encpw
 echo
 prompt "Enter hostname: "
 read -r host
+prompt "Enter CIFS-SERVER: "
+read -r CIFS_SERVER
+prompt "Enter username for \"$CIFS_SERVER\": "
+read -r CIFS_USER
+prompt "Enter password for \"$CIFS_USER\": "
+read -r -s CIFS_PASS
+echo
 
 info "creating user \"$username\""
 info "disk $rootdisk will be formatted"
@@ -167,8 +174,7 @@ pvcreate /dev/mapper/cryptlvm &>/dev/null
 vgcreate vg /dev/mapper/cryptlvm &>/dev/null
 
 lvcreate -L ${ram}G vg -n swap &>/dev/null
-### change to 40
-lvcreate -L 10G vg -n root &>/dev/null
+lvcreate -L 40G vg -n root &>/dev/null
 lvcreate -l 100%FREE vg -n home &>/dev/null
 
 info "formatting partitions"
@@ -202,7 +208,7 @@ echo
 
 genfstab -U /mnt >> /mnt/etc/fstab
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/chroot.sh" -o /mnt/chroot.sh
-arch-chroot /mnt bash chroot.sh $rootpart $username $userpw $rootpw $host
+arch-chroot /mnt bash chroot.sh $rootpart $username $userpw $rootpw $host $CIFS_SERVER $CIFS_USER "$CIFS_PASS"
 umount /mnt/hostrun
 rm -rf /mnt/hostrun
 rm /mnt/chroot.sh

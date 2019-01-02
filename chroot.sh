@@ -28,7 +28,7 @@ info "installing bootloader"
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null
 grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null
 umount /run/lvm
-useradd -m -g users -G wheel -s /bin/zsh $2
+useradd -m -g users -G wheel -s /bin/zsh -c "$9" $2
 echo "$2:$3" | chpasswd
 echo "root:$4" | chpasswd
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/sudoers.temp" -o /etc/sudoers

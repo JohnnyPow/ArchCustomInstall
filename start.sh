@@ -86,6 +86,8 @@ else
   exit 1
 fi
 
+prompt "Enter full name for \"$username\": "
+read -r fullname
 prompt "Enter password for \"$username\": "
 read -r -s userpw
 echo
@@ -208,7 +210,7 @@ echo
 
 genfstab -U /mnt >> /mnt/etc/fstab
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/chroot.sh" -o /mnt/chroot.sh
-arch-chroot /mnt bash chroot.sh $rootpart $username $userpw $rootpw $host $CIFS_SERVER $CIFS_USER "$CIFS_PASS"
+arch-chroot /mnt bash chroot.sh $rootpart $username $userpw $rootpw $host $CIFS_SERVER $CIFS_USER "$CIFS_PASS" "$fullname"
 umount /mnt/hostrun
 rm -rf /mnt/hostrun
 rm /mnt/chroot.sh

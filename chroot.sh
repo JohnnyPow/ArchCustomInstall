@@ -42,6 +42,8 @@ sudo -u $2 bash rice.sh $2
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/sudoers" -o /etc/sudoers
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/hidpi" -o /etc/profile.d/hidpi.sh
 curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/slick-greeter" -o /etc/lightdm/slick-greeter.conf
+curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/synaptics" -o /etc/X11/xorg.conf.d/50-synaptics.conf
+curl -sL "https://raw.githubusercontent.com/JohnnyVim/ArchCustomInstall/master/xorg" -o /etc/X11/xorg.conf
 
 mkdir -p /etc/samba/credentials
 chown root:root /etc/samba/credentials

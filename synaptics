@@ -1,0 +1,26 @@
+Section "InputClass"
+	Identifier "touchpad catchall"
+	Driver "synaptics"
+	MatchIsTouchpad "on"
+	# enable clik zone and configure 3 buttons on bottom
+	Option "ClickPad" "1"
+	Option "SoftButtonAreas" "0 0 0 0 0 0 0 0"
+	# other commons options than you may want to configure
+	# scroll with two fingers (enabled vertically, disabled horizontally)
+	Option "VertTwoFingerScroll" "1"
+	Option "HorizTwoFingerScroll" "0"
+	Option "VertScrollDelta" "-30"
+	Option "HorizScrollDelta" "-30"
+	# enable tap as click: 1 finger -> left button, 2 fingers -> right, 3 fingers -> middle
+	Option "TapButton1" "1"
+	Option "TapButton2" "3"
+	Option "TapButton3" "2"
+	# idem but for click with 1,2,3 fingers. Use "0" to disable. 
+	Option "ClickFinger1" "1"
+	Option "ClickFinger2" "3"
+	Option "ClickFinger3" "2"
+	# palm detection. These parameters somehow works, YMMV. 
+	Option "PalmDetect" "1"
+	Option "PalmMinWidth" "0"
+	Option "PalmMinZ" "10"
+EndSection

@@ -179,8 +179,8 @@ lvcreate -l 100%FREE vg -n home &>/dev/null
 
 info "formatting partitions"
 mkfs.vfat -F 32 $bootpart &>/dev/null
-mkfs.ext4 /dev/vg/root &>/dev/null
-mkfs.ext4 /dev/vg/home &>/dev/null
+mkfs.xfs /dev/vg/root &>/dev/null
+mkfs.xfs /dev/vg/home &>/dev/null
 mkswap /dev/vg/swap &>/dev/null
 
 info "mounting partitions"
